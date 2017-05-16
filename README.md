@@ -12,7 +12,7 @@ To get NetBox up and running:
 # docker-compose up -d
 ```
 
-The application will be available on http://localhost/ after a few minutes.
+The application will be available on http://localhost:8888/ after a few minutes.
 
 Default credentials:
 
