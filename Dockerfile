@@ -1,6 +1,7 @@
 FROM python:2.7-alpine
 
-RUN apk add --no-cache \
+RUN   sed "1i http://mirrors.ustc.edu.cn/alpine/v3.4/main/" -if /etc/apk/repositories && \
+      apk add --no-cache \
       bash \
       build-base \
       ca-certificates \
@@ -19,12 +20,16 @@ RUN apk add --no-cache \
 WORKDIR /opt
 
 ARG BRANCH=v2-beta
-ARG URL=https://github.com/digitalocean/netbox/archive/$BRANCH.tar.gz
-RUN wget -q -O - "${URL}" | tar xz \
-  && ln -s netbox* netbox
+ARG URL=https://github.com/digitalocean/netbox/archive/v2.0.2.tar.gz
+RUN wget -q -O - "${URL}" && \
+  tar -xf *.tar.gz && \
+  mkdir netbox && \
+  mv netbox*/* netbox
 
 WORKDIR /opt/netbox
 RUN pip install -r requirements.txt
+
+ADD docker/nginx.conf /etc/netbox-nginx/nginx.conf 
 
 RUN ln -s configuration.docker.py netbox/netbox/configuration.py
 COPY docker/gunicorn_config.py /opt/netbox/
