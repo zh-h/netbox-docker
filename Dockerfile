@@ -19,15 +19,14 @@ RUN   sed "1i http://mirrors.ustc.edu.cn/alpine/v3.4/main/" -if /etc/apk/reposit
 
 WORKDIR /opt
 
-ARG BRANCH=v2-beta
 ARG URL=https://github.com/digitalocean/netbox/archive/v2.0.2.tar.gz
-RUN wget -q -O - "${URL}" && \
+RUN wget "${URL}" && \
   tar -xf *.tar.gz && \
   mkdir netbox && \
   mv netbox*/* netbox
 
 WORKDIR /opt/netbox
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
 
 ADD docker/nginx.conf /etc/netbox-nginx/nginx.conf 
 
