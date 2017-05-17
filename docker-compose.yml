@@ -6,6 +6,7 @@ services:
         depends_on:
         - postgres
         env_file: netbox.env
+        restart: always
         volumes:
         - netbox-nginx-config:/etc/netbox-nginx/
         - netbox-static-files:/opt/netbox/netbox/static
@@ -16,10 +17,12 @@ services:
         - netbox
         ports:
         - "8888:80"
+        restart: always
         volumes:
         - netbox-static-files:/opt/netbox/netbox/static
         - netbox-nginx-config:/etc/netbox-nginx/
     postgres:
+        restart: always
         image: postgres:9.6-alpine
         environment:
             POSTGRES_USER: netbox
